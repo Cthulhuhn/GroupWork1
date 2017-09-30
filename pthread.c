@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <stdbool.h>
 
 #define THREAD_COUNT 16
 #define SIZE 3
@@ -30,7 +31,7 @@
 #define HIGH 5
 
 //Typedefs
-typedef void (*WorkFunction)();
+typedef bool (*WorkFunction)();
 
 //Stubs
 void* doWork(void* parameter);
@@ -85,7 +86,7 @@ int main()
 //work wrapper for our request lambda launch
 void* doWork(void* parameter)
 {
-    requestWork()();
+    while(requestWork()());
 }
 
 //Returns lambda for next unit of work or a terminator.
@@ -119,21 +120,22 @@ WorkFunction requestWork()
 
 //Generates lambda for doing work.
 WorkFunction generateDoWork(int x, int y) {
-    void lambda() {
+    bool lambda() {
         // C doesn't handle closures. These variables
         // avoid a segfault.
         int innerX = x;
         int innerY = y;
         matSolution[innerX][innerY] = getDotProduct(innerX,innerY);
-        requestWork()();
+        return true;
     }
     return lambda;
 }
 
 //Generates terminator for thead in algorithm
 WorkFunction generateTerminate() {
-    void lambda() {
+    bool lambda() {
         pthread_barrier_wait(&solutionBarrier);
+        return false;
     }
     return lambda;
 }

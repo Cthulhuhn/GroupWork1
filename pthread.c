@@ -1,6 +1,6 @@
 //*****************************************************************/
 // Author: 20Goto10
-// Description: This is the sequential version of the matrix
+// Description: This is the pthread version of the matrix
 //  multiplcation problem. This abstracts the movement of the
 //  iteration over the matrices into a linked list of recursive
 //  functions over a notional linked list of functions. This

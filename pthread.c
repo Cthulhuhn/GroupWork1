@@ -25,7 +25,7 @@
 #include <pthread.h>
 #include <stdbool.h>
 
-#define THREAD_COUNT 16
+#define THREAD_COUNT 5
 #define SIZE 3
 #define SEED 34
 #define HIGH 5
@@ -102,20 +102,15 @@ WorkFunction requestWork()
 
     //this variable needs to be set before we release the lock or
     //  we risk race conditions.
-    WorkFunction returnValue;
     if(currentY >= SIZE) //handles early out
     {
-        returnValue = generateTerminate();
+        pthread_mutex_unlock(&popMutex);
+        return generateTerminate();
     }
-    else 
-    {
-        //this else isn't strictly necessary, we could use 2
-        //  returns but I prefer to avoid having multiple unlocks
-        returnValue = generateDoWork(currentX, currentY);
-    }
-    
+    int x = currentX;
+    int y = currentY;
     pthread_mutex_unlock(&popMutex);
-    return returnValue;
+    return generateDoWork(x, y);
 }
 
 //Generates lambda for doing work.

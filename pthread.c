@@ -104,17 +104,18 @@ WorkFunction requestWork()
     WorkFunction returnValue;
     if(currentY >= SIZE) //handles early out
     {
-        returnValue = generateTerminate();
+        pthread_mutex_unlock(&popMutex);
+        return generateTerminate();
     }
     else 
     {
         //this else isn't strictly necessary, we could use 2
         //  returns but I prefer to avoid having multiple unlocks
-        returnValue = generateDoWork(currentX, currentY);
+        int x = currentX;
+        int y = currentY;
+        pthread_mutex_unlock(&popMutex);
+        return generateDoWork(x, y);
     }
-    
-    pthread_mutex_unlock(&popMutex);
-    return returnValue;
 }
 
 //Generates lambda for doing work.

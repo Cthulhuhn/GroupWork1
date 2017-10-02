@@ -22,13 +22,14 @@
 //*****************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define SIZE 3
 #define SEED 34
 #define HIGH 5
 
 //Typedefs
-typedef void (*WorkFunction)();
+typedef bool (*WorkFunction)();
 
 //Stubs
 WorkFunction requestWork();
@@ -56,7 +57,7 @@ int main()
     prettyPrint("B", matB);
     
     //this is where the multi threading magic goes. Any amount of threads can make this call and have this work.
-    requestWork()();
+    while(requestWork()());
     prettyPrint("Solution", matSolution);
 }
 
@@ -80,21 +81,22 @@ WorkFunction requestWork()
 
 //Generates lambda for doing work.
 WorkFunction generateDoWork(int x, int y) {
-    void lambda() {
+    bool lambda() {
         // C doesn't handle closures. These variables
         // avoid a segfault.
         int innerX = x;
         int innerY = y;
         matSolution[innerX][innerY] = getDotProduct(innerX,innerY);
-        requestWork()();
+        return true;
     }
     return lambda;
 }
 
 //Generates terminator for thead in algorithm
 WorkFunction generateTerminate() {
-    void lambda() {
+    bool lambda() {
         //todo: wait.
+        return false;
     }
     return lambda;
 }

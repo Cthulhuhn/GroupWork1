@@ -23,14 +23,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <stdbool.h>
 
-#define THREAD_COUNT 16
+#define THREAD_COUNT 5
 #define SIZE 3
 #define SEED 34
 #define HIGH 5
 
 //Typedefs
-typedef void (*WorkFunction)();
+typedef bool (*WorkFunction)();
 
 //Stubs
 void* doWork(void* parameter);
@@ -85,7 +86,7 @@ int main()
 //work wrapper for our request lambda launch
 void* doWork(void* parameter)
 {
-    requestWork()();
+    while(requestWork()());
 }
 
 //Returns lambda for next unit of work or a terminator.
@@ -101,40 +102,35 @@ WorkFunction requestWork()
 
     //this variable needs to be set before we release the lock or
     //  we risk race conditions.
-    WorkFunction returnValue;
     if(currentY >= SIZE) //handles early out
     {
         pthread_mutex_unlock(&popMutex);
         return generateTerminate();
     }
-    else 
-    {
-        //this else isn't strictly necessary, we could use 2
-        //  returns but I prefer to avoid having multiple unlocks
-        int x = currentX;
-        int y = currentY;
-        pthread_mutex_unlock(&popMutex);
-        return generateDoWork(x, y);
-    }
+    int x = currentX;
+    int y = currentY;
+    pthread_mutex_unlock(&popMutex);
+    return generateDoWork(x, y);
 }
 
 //Generates lambda for doing work.
 WorkFunction generateDoWork(int x, int y) {
-    void lambda() {
+    bool lambda() {
         // C doesn't handle closures. These variables
         // avoid a segfault.
         int innerX = x;
         int innerY = y;
         matSolution[innerX][innerY] = getDotProduct(innerX,innerY);
-        requestWork()();
+        return true;
     }
     return lambda;
 }
 
 //Generates terminator for thead in algorithm
 WorkFunction generateTerminate() {
-    void lambda() {
+    bool lambda() {
         pthread_barrier_wait(&solutionBarrier);
+        return false;
     }
     return lambda;
 }

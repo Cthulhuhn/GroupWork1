@@ -72,7 +72,7 @@ int main()
     //prettyPrint("Solution", matSolution);
     elapsed = (finish.tv_sec - start.tv_sec);
     elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-    printf("Time elapsed (ms): %f\n", 1000*(t2-t1)/(double) (CLOCKS_PER_SEC));
+    printf("Time elapsed (ms): %f\n", elapsed);
 }
 
 //Returns lambda for next unit of work or a terminator.

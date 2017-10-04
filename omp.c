@@ -80,15 +80,18 @@ WorkFunction requestWork()
 		{
 			currentX = 0;
 			currentY++;
-		}
-	}								//ADDED scoping
-
-    if(currentY >= SIZE) //handles early out
-    {
-        return generateTerminate();
+        }
+        
+        if(currentY >= SIZE) //handles early out
+        {
+            return generateTerminate();
+        }
+        int x = currentX;
+        int y = currentY;
+        
     }
 
-    return generateDoWork(currentX, currentY);
+    return generateDoWork(x, y);
 }
 
 //Generates lambda for doing work.

@@ -55,8 +55,8 @@ int main()
     fillMatrix(matA);
     fillMatrix(matB);
 
-    prettyPrint("A", matA);
-    prettyPrint("B", matB);
+    //prettyPrint("A", matA);
+    //prettyPrint("B", matB);
 
     clock_t t1, t2;
 
@@ -64,7 +64,7 @@ int main()
     t1 = clock();
     while(requestWork()());
     t2 = clock();
-    prettyPrint("Solution", matSolution);
+    //prettyPrint("Solution", matSolution);
     printf("Time elapsed (ms): %f\n", 1000*(t2-t1)/(double) (CLOCKS_PER_SEC));
 }
 

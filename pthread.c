@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <stdbool.h>
+#include <time.h>
+#include <unistd.h>
 
 #define THREAD_COUNT 5
 #define SIZE 3
@@ -53,33 +55,39 @@ pthread_mutex_t popMutex;
 
 //entry
 int main()
-{  
+{
     srand(SEED);
     fillMatrix(matA);
     fillMatrix(matB);
-    
-    prettyPrint("A", matA);
-    prettyPrint("B", matB);
-    
+
+    //prettyPrint("A", matA);
+    //prettyPrint("B", matB);
+
+    clock_t t1, t2;
+
     pthread_mutex_init(&popMutex, NULL);
     pthread_t threads[THREAD_COUNT];
     pthread_barrier_init(&solutionBarrier, NULL, THREAD_COUNT + 1);
+    t1 = clock();
 
     for(int i = 0; i < THREAD_COUNT; ++i)
     {
         pthread_create(&threads[i], NULL, doWork, (void*)(long)i);
     }
     pthread_barrier_wait(&solutionBarrier);
+    t2 = clock();
+
 
     for(int j = 0; j < THREAD_COUNT; ++j)
     {
         //To be perfectly honest, I'm not 100% sure this is necessary
         //  but leaving threads in fire and forget mode makes my
         //  eye twitch... so I'm cleaning up here.
-        pthread_join(threads[j], NULL);        
+        pthread_join(threads[j], NULL);
     }
 
-    prettyPrint("Solution", matSolution);
+    //prettyPrint("Solution", matSolution);
+    printf("Time elapsed (ms): %f\n", 1000*(t2-t1)/(double) (CLOCKS_PER_SEC));
     pthread_barrier_destroy(&solutionBarrier);
 }
 
@@ -136,12 +144,12 @@ WorkFunction generateTerminate() {
 }
 
 //Gets the dot product for a given row and column
-int getDotProduct(int row, int col) 
+int getDotProduct(int row, int col)
 {
     //I suppose this could be threadable too... but it would super complicate the algorithm and would
-    // explode the number of threads required to solve for a single spot. I wouldn't recommend this.    
+    // explode the number of threads required to solve for a single spot. I wouldn't recommend this.
     int sum = 0;
-    for(int i = 0; i < SIZE; ++i) 
+    for(int i = 0; i < SIZE; ++i)
     {
         sum += matA[i][col] * matB[row][i];
     }
@@ -149,10 +157,10 @@ int getDotProduct(int row, int col)
 }
 
 //Helper to fill matrix with random value.
-void fillMatrix(int matrix[SIZE][SIZE]) {  
+void fillMatrix(int matrix[SIZE][SIZE]) {
     for(int y = 0; y < SIZE; ++y)
     {
-        for(int x = 0; x < SIZE; ++x) 
+        for(int x = 0; x < SIZE; ++x)
         {
             matrix[x][y] = rand() % HIGH;
         }
@@ -160,13 +168,13 @@ void fillMatrix(int matrix[SIZE][SIZE]) {
 }
 
 //Helper function for printing a matrix.
-void prettyPrint(char* name, int matrix[SIZE][SIZE]) 
+void prettyPrint(char* name, int matrix[SIZE][SIZE])
 {
     printf("Matrix %s:\n", name);
 
     for(int y = 0; y < SIZE; ++y)
     {
-        for(int x = 0; x < SIZE; ++x) 
+        for(int x = 0; x < SIZE; ++x)
         {
             printf("%5d", matrix[x][y]);
         }

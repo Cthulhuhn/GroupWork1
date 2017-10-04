@@ -27,7 +27,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#define SIZE 3
+#define SIZE 1000
 #define SEED 34
 #define HIGH 5
 

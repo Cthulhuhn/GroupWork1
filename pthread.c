@@ -28,7 +28,7 @@
 #include <unistd.h>
 
 #define THREAD_COUNT 5
-#define SIZE 3
+#define SIZE 1000
 #define SEED 34
 #define HIGH 5
 

@@ -73,6 +73,7 @@ int main()
 //Returns lambda for next unit of work or a terminator.
 WorkFunction requestWork()
 {
+    int x, y;
 	#pragma omp critical			//ADDED critical section
 	{								//ADDED scoping
 		currentX++;
@@ -81,14 +82,13 @@ WorkFunction requestWork()
 			currentX = 0;
 			currentY++;
         }
-        
-        if(currentY >= SIZE) //handles early out
-        {
-            return generateTerminate();
-        }
-        int x = currentX;
-        int y = currentY;
-        
+        x = currentX;
+        y = currentY;
+	}								//ADDED scoping
+
+    if(y >= SIZE) //handles early out
+    {
+        return generateTerminate();
     }
 
     return generateDoWork(x, y);

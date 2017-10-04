@@ -59,16 +59,19 @@ int main()
     //prettyPrint("A", matA);
     //prettyPrint("B", matB);
 
-    clock_t t1, t2;
+    struct timespec start, finish;
+    double elapsed;
+    clock_gettime(CLOCK_MONOTONIC, &start);    
 
     //this is where the multi threading magic goes. Any amount of threads can make this call and have this work.
-    t1 = clock();
     #pragma omp parallel 
     {			//ADDED multi threading magic
     while(requestWork()());
     }
-    t2 = clock();
+    clock_gettime(CLOCK_MONOTONIC, &finish);
     //prettyPrint("Solution", matSolution);
+    elapsed = (finish.tv_sec - start.tv_sec);
+    elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
     printf("Time elapsed (ms): %f\n", 1000*(t2-t1)/(double) (CLOCKS_PER_SEC));
 }
 

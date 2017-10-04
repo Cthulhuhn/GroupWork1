@@ -63,19 +63,20 @@ int main()
     //prettyPrint("A", matA);
     //prettyPrint("B", matB);
 
-    clock_t t1, t2;
-
+    struct timespec start, finish;
+    double elapsed;
+    
     pthread_mutex_init(&popMutex, NULL);
     pthread_t threads[THREAD_COUNT];
     pthread_barrier_init(&solutionBarrier, NULL, THREAD_COUNT + 1);
-    t1 = clock();
+    clock_gettime(CLOCK_MONOTONIC, &start);    
 
     for(int i = 0; i < THREAD_COUNT; ++i)
     {
         pthread_create(&threads[i], NULL, doWork, (void*)(long)i);
     }
     pthread_barrier_wait(&solutionBarrier);
-    t2 = clock();
+    clock_gettime(CLOCK_MONOTONIC, &finish);
 
 
     for(int j = 0; j < THREAD_COUNT; ++j)
@@ -86,8 +87,10 @@ int main()
         pthread_join(threads[j], NULL);
     }
 
+    elapsed = (finish.tv_sec - start.tv_sec);
+    elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
     //prettyPrint("Solution", matSolution);
-    printf("Time elapsed (ms): %f\n", 1000*(t2-t1)/(double) (CLOCKS_PER_SEC));
+    printf("Time elapsed (ms): %f\n", elapsed);
     pthread_barrier_destroy(&solutionBarrier);
 }
 

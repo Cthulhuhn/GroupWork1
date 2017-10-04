@@ -63,8 +63,10 @@ int main()
 
     //this is where the multi threading magic goes. Any amount of threads can make this call and have this work.
     t1 = clock();
-    #pragma omp parallel			//ADDED multi threading magic
+    #pragma omp parallel 
+    {			//ADDED multi threading magic
     while(requestWork()());
+    }
     t2 = clock();
     //prettyPrint("Solution", matSolution);
     printf("Time elapsed (ms): %f\n", 1000*(t2-t1)/(double) (CLOCKS_PER_SEC));

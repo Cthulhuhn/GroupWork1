@@ -55,8 +55,8 @@ int main()
     fillMatrix(matA);
     fillMatrix(matB);
 
-    //prettyPrint("A", matA);
-    //prettyPrint("B", matB);
+    prettyPrint("A", matA);
+    prettyPrint("B", matB);
     struct timespec start, finish;
     double elapsed;
     
@@ -69,7 +69,7 @@ int main()
 
     elapsed = (finish.tv_sec - start.tv_sec);
     elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-    //prettyPrint("Solution", matSolution);
+    prettyPrint("Solution", matSolution);
     printf("Time elapsed (ms): %f\n", elapsed);
 }
 

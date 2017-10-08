@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <omp.h>					//ADDED header
+#include <omp.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -65,7 +65,7 @@ int main()
 
     //this is where the multi threading magic goes. Any amount of threads can make this call and have this work.
     #pragma omp parallel
-    {			//ADDED multi threading magic
+    {
     while(requestWork()());
     }
     clock_gettime(CLOCK_MONOTONIC, &finish);
@@ -80,8 +80,8 @@ int main()
 WorkFunction requestWork()
 {
     int x, y;
-	#pragma omp critical			//ADDED critical section
-	{								//ADDED scoping
+	#pragma omp critical
+	{
 		currentX++;
 		if(currentX >= SIZE) //handles wrap to next line
 		{
@@ -90,7 +90,7 @@ WorkFunction requestWork()
         }
         x = currentX;
         y = currentY;
-	}								//ADDED scoping
+	}
 
     if(y >= SIZE) //handles early out
     {
@@ -110,14 +110,12 @@ WorkFunction generateDoWork(int x, int y) {
         matSolution[innerX][innerY] = getDotProduct(innerX,innerY);
         return true;
     }
-    //printf(".\n");				//ADDED to verify the # of calls to this function
     return lambda;
 }
 
 //Generates terminator for thead in algorithm
 WorkFunction generateTerminate() {
     bool lambda() {
-        //todo: wait.
         return false;
     }
     return lambda;

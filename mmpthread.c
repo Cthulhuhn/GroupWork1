@@ -112,13 +112,12 @@ WorkFunction requestWork()
         currentY++;
     }
 
-    //this variable needs to be set before we release the lock or
-    //  we risk race conditions.
     if(currentY >= SIZE) //handles early out
     {
         pthread_mutex_unlock(&popMutex);
         return generateTerminate();
     }
+    
     int x = currentX;
     int y = currentY;
     pthread_mutex_unlock(&popMutex);

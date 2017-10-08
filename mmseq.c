@@ -107,7 +107,6 @@ WorkFunction generateDoWork(int x, int y) {
 //Generates terminator for thead in algorithm
 WorkFunction generateTerminate() {
     bool lambda() {
-        //todo: wait.
         return false;
     }
     return lambda;

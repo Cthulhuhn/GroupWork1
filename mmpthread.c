@@ -27,7 +27,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#define THREAD_COUNT 5
+#define THREAD_COUNT 6
 #define SIZE 5
 #define SEED 34
 #define HIGH 5
@@ -117,7 +117,7 @@ WorkFunction requestWork()
         pthread_mutex_unlock(&popMutex);
         return generateTerminate();
     }
-    
+
     int x = currentX;
     int y = currentY;
     pthread_mutex_unlock(&popMutex);

@@ -10,7 +10,7 @@ Authors: Lucas Roe, Charles Huhn, Shawn Cheek
 TO BUILD (where % is the prompt):  
 mmseq.c:     % gcc mmseq.c  
 mmpthread.c: % gcc mmpthread.c -lpthread  
-mmomp.c:     % gcc mmomp.c -omp  
+mmomp.c:     % gcc mmomp.c -fopenmp  
 
 TO RUN:  
 \[all versions]: %./a.out

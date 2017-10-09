@@ -66,7 +66,7 @@ int main()
     //this is where the multi threading magic goes. Any amount of threads can make this call and have this work.
     #pragma omp parallel
     {
-    while(requestWork()());
+    	while(requestWork()());
     }
     clock_gettime(CLOCK_MONOTONIC, &finish);
 
@@ -87,7 +87,7 @@ WorkFunction requestWork()
 		{
 			currentX = 0;
 			currentY++;
-        }
+        	}
         x = currentX;
         y = currentY;
 	}
